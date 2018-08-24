@@ -19,8 +19,9 @@ const {
 
   lerp3,
   linearGradient,
-  gradient
-} = require('../dist/kandisky.module');
+  gradient,
+  multiGradient
+} = require('../dist/kandinsky.module');
 
 // This function corrects rounding errors like 0.69999999999 to 0.70
 const errorCorrect = n => parseFloat(parseFloat(n).toPrecision(2));
@@ -177,6 +178,29 @@ describe('Kandisky JS Colour Library', function() {
 
     const expected = Array.from(Array(n), (_, i) => lerp3(easeFn(i / (n-1)), a, b));
     expect(out).to.deep.equal(expected)
+  });
+
+  it('create a linear gradient of multiple vector3 colors', () => {
+    const a = [0, 0, 0];
+    const b = [255, 255, 255];
+    const c = [23, 45, 67];
+    const d = [99, 101, 222];
+    const n = 10;
+
+    for (let i = 1; i < 101; i += 1) {
+      const mg2 = multiGradient(i, [a, b]);
+      expect(mg2.length).to.equal(i);
+    }
+
+    const g1 = [
+      ...linearGradient(Math.ceil(n/3), a, b),
+      ...linearGradient(Math.round(n/3), b, c),
+      ...linearGradient(Math.ceil(n/3), c, d),
+    ];
+
+    const g2 = multiGradient(n, [a, b, c, d]);
+
+    expect(g1).to.deep.equal(g2);
   });
 });
 /* eslint-enable func-names */

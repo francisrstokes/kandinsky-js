@@ -95,6 +95,12 @@ and import or require as needed. If you need to use a standalone windowed versio
   <p><b>gradient(easeFn, n, c1, c2)</b></p>
   returns an length `n` array of Vector3 colours. colours are between `c1` and `c2`, and are spaced according to the easing function `easeFn`.
 </details>
+<details>
+  <summary>multiGradient :: Int -> [[Number, Number, Number]] -> [[Number, Number, Number]]</summary>
+  <p><b>multiGradient(n, [col1, col3, ..., colN])</b></p>
+  returns an length `n` array of Vector3 colours. colours are the ones formed from the `linearGradient(n/(numColours-1), col1, col2)` for all colours `col1, col2, ..., colN`
+</details>
+
 
 ### Window API
 

@@ -162,13 +162,33 @@ const lerp3 = curry((t, [a1, b1, c1], [a2, b2, c2]) => [
 
 // linearGradient :: Int -> [Number, Number, Number] -> [Number, Number, Number] -> [[Number, Number, Number]]
 const linearGradient = curry((n, c1, c2) => {
-  return Array.from(Array(n), (_, i) => lerp3(i / (n-1), c1, c2));
+  const d = (n-1 !== 0) ? n-1 : 1;
+  return Array.from(Array(n), (_, i) => lerp3(i / d, c1, c2));
 });
 
 // gradient :: Function -> Int -> [Number, Number, Number] -> [Number, Number, Number] -> [[Number, Number, Number]]
 const gradient = curry((ease, n, c1, c2) => {
-  return Array.from(Array(n), (_, i) => lerp3(ease(i / (n-1)), c1, c2));
+  const d = (n-1 !== 0) ? n-1 : 1;
+  return Array.from(Array(n), (_, i) => lerp3(ease(i / d), c1, c2));
 });
+
+// multiGradient :: Int -> [[Number, Number, Number]] -> [[Number, Number, Number]]
+const multiGradient = (n, colors) => {
+  return colors.reduce((grad, col, i) => {
+    if (i === 0) return grad;
+    const roundingFn = (i === colors.length-1 || i === 1)
+      ? Math.ceil
+      : Math.round;
+
+    const col1 = colors[i-1];
+    const col2 = col;
+
+    return [
+      ...grad,
+      ...linearGradient(roundingFn(n/(colors.length - 1)), col1, col2)
+    ];
+  }, []);
+}
 
 const kandinsky = {
   rgb2hsl,
@@ -186,6 +206,7 @@ const kandinsky = {
   lerp3,
   linearGradient,
   gradient,
+  multiGradient,
 };
 
 /* start window exports */
@@ -205,6 +226,7 @@ const polute = () => {
   window.lerp3 = lerp3;
   window.linearGradient = linearGradient;
   window.gradient = gradient;
+  window.multiGradient = multiGradient;
 };
 
 /**
@@ -230,4 +252,5 @@ export {darkenHex};
 export {lerp3};
 export {linearGradient};
 export {gradient};
+export {multiGradient};
 /* end exports */
