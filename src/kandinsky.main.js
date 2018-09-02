@@ -190,53 +190,26 @@ const multiGradient = (n, colors) => {
   }, []);
 }
 
-const kandinsky = {
-  rgb2hsl,
-  hsl2rgb,
-  hex2rgb,
-  rgb2hex,
-  hex2hsl,
-  hsl2hex,
-  darkenRgb,
-  lightenRgb,
-  darkenHsl,
-  lightenHsl,
-  lightenHex,
-  darkenHex,
-  lerp3,
-  linearGradient,
-  gradient,
-  multiGradient,
+const polute = (target = window) => {
+  target.rgb2hsl = rgb2hsl;
+  target.hsl2rgb = hsl2rgb;
+  target.hex2rgb = hex2rgb;
+  target.rgb2hex = rgb2hex;
+  target.hex2hsl = hex2hsl;
+  target.hsl2hex = hsl2hex;
+  target.darkenRgb = darkenRgb;
+  target.lightenRgb = lightenRgb;
+  target.darkenHsl = darkenHsl;
+  target.lightenHsl = lightenHsl;
+  target.lightenHex = lightenHex;
+  target.darkenHex = darkenHex;
+  target.lerp3 = lerp3;
+  target.linearGradient = linearGradient;
+  target.gradient = gradient;
+  target.multiGradient = multiGradient;
 };
 
-/* start window exports */
-const polute = () => {
-  window.rgb2hsl = rgb2hsl;
-  window.hsl2rgb = hsl2rgb;
-  window.hex2rgb = hex2rgb;
-  window.rgb2hex = rgb2hex;
-  window.hex2hsl = hex2hsl;
-  window.hsl2hex = hsl2hex;
-  window.darkenRgb = darkenRgb;
-  window.lightenRgb = lightenRgb;
-  window.darkenHsl = darkenHsl;
-  window.lightenHsl = lightenHsl;
-  window.lightenHex = lightenHex;
-  window.darkenHex = darkenHex;
-  window.lerp3 = lerp3;
-  window.linearGradient = linearGradient;
-  window.gradient = gradient;
-  window.multiGradient = multiGradient;
-};
-
-/**
- * Exposed API
- */
-window.kandinsky = Object.assign({ polute }, kandinsky);
-/* end window exports */
-
-/* start exports */
-export default kandinsky;
+export {polute};
 export {rgb2hsl};
 export {hsl2rgb};
 export {hex2rgb};
@@ -253,4 +226,3 @@ export {lerp3};
 export {linearGradient};
 export {gradient};
 export {multiGradient};
-/* end exports */

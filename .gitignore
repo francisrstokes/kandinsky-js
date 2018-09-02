@@ -3,3 +3,5 @@ node_modules/
 reports/
 npm-debug.*
 .npmignore
+_next.js_
+dist/
