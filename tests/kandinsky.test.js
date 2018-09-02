@@ -20,8 +20,10 @@ const {
   lerp3,
   linearGradient,
   gradient,
-  multiGradient
-} = require('../dist/kandinsky.module');
+  multiGradient,
+
+  polute
+} = require('../dist/kandinsky');
 
 // This function corrects rounding errors like 0.69999999999 to 0.70
 const errorCorrect = n => parseFloat(parseFloat(n).toPrecision(2));
@@ -32,6 +34,12 @@ const errorMargin = 255 / 100;
 
 /* eslint-disable func-names */
 describe('Kandisky JS Colour Library', function() {
+  it('should polute a target object', () => {
+    const obj = {};
+    polute(obj);
+    expect(Object.keys(obj)).to.contain('hex2rgb');
+  });
+
   it('convert a hex code to a rgb array', () => {
     const hex = '#FF0000';
     const hexNoHash = 'FF0000';
@@ -193,8 +201,8 @@ describe('Kandisky JS Colour Library', function() {
     }
 
     const g1 = [
-      ...linearGradient(Math.ceil(n/3), a, b),
-      ...linearGradient(Math.round(n/3), b, c),
+      ...linearGradient(Math.ceil(n/3), a, b),  // Start and end gradients get ceil'd
+      ...linearGradient(Math.round(n/3), b, c), // Middle gradients get round'd
       ...linearGradient(Math.ceil(n/3), c, d),
     ];
 
