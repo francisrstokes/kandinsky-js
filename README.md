@@ -8,7 +8,12 @@
 
 and import or require as needed. If you need to use a standalone windowed version in a script tag:
 
-`<script src="node_modules/kandinsky-js/dist/kandinsky.window.js"></script>`
+`<script src="https://unpkg.com/kandinsky-js@1.0.0/dist/kandinsky.js"></script>`
+
+or
+
+`<script src="node_modules/kandinsky-js/dist/kandinsky.js"></script>`
+
 
 ## Features
 
