@@ -147,15 +147,37 @@ gradient :: Function -> Int -> [Number, Number, Number] -> [Number, Number, Numb
 
 > returns an length `n` array of Vector3 colours. colours are between `c1` and `c2`, and are spaced according to the easing function `easeFn`.
 
+### __rMultiGradient(n, [col1, col3, ..., colN])__
+
+```javascript
+rMultiGradient :: Int -> [[Number, Number, Number]] -> [[Number, Number, Number]
+```
+
+### __rLinearGradient(n, c1, c2)__
+
+```javascript
+rLinearGradient :: Int -> [Number, Number, Number] -> [Number, Number, Number] -> [[Number, Number, Number]
+```
+
+> returns a rounded, length `n` array of Vector3 colours. colours are evenly spaced between `c1` and `c2`.
+
+### __rGradient(easeFn, n, c1, c2)__
+
+```javascript
+rGradient :: Function -> Int -> [Number, Number, Number] -> [Number, Number, Number] -> [[Number, Number, Number]
+```
+
+> returns a rounded, length `n` array of Vector3 colours. colours are between `c1` and `c2`, and are spaced according to the easing function `easeFn`.
+
 ### __multiGradient(n, [col1, col3, ..., colN])__
 
 ```javascript
 multiGradient :: Int -> [[Number, Number, Number]] -> [[Number, Number, Number]
 ```
 
-> returns an length `n` array of Vector3 colours. colours are the ones formed from the `linearGradient(n/(numColours-1), col1, col2)` for all colours `col1, col2, ..., colN`
+> returns a rounded, length `n` array of Vector3 colours. colours are the ones formed from the `linearGradient(n/(numColours-1), col1, col2)` for all colours `col1, col2, ..., colN`
 
-### polute(target)__
+## __polute(target)__
 
 ```javascript
 polute :: Object -> void
