@@ -25,6 +25,10 @@ const {
   rGradient,
   rMultiGradient,
 
+  complimentRgb,
+  complimentHex,
+  complimentHsl,
+
   polute
 } = require('../dist/kandinsky');
 
@@ -34,6 +38,7 @@ const errorCorrect = n => parseFloat(parseFloat(n).toPrecision(2));
 // There is a rounding error because of the floating point math.
 // Tests allow for a maximum 1% error margin.
 const errorMargin = 255 / 100;
+const hslErrorMargin = 360/100;
 
 /* eslint-disable func-names */
 describe('Kandisky JS Colour Library', function() {
@@ -259,6 +264,85 @@ describe('Kandisky JS Colour Library', function() {
     const g2 = rMultiGradient(n, [a, b, c, d]);
 
     expect(g1).to.deep.equal(g2);
+  });
+
+  it('create a hsl complimentary colour pallete', () => {
+    const c = hex2hsl('#ff0000');
+    const expected2 = ['#ff0000', '#00ffff'].map(hex2hsl).map(c => c.map(errorCorrect));
+    const result2 = complimentHsl(2, c);
+
+    const diffs2 = expected2.map((ex, i) => [
+      Math.max(result2[i][0], ex[0]) - Math.min(result2[i][0], ex[0]),
+      Math.max(result2[i][1], ex[1]) - Math.min(result2[i][1], ex[1]),
+      Math.max(result2[i][2], ex[2]) - Math.min(result2[i][2], ex[2]),
+    ]);
+    diffs2.forEach(diff => diff.forEach(d => expect(d < hslErrorMargin).to.be.true));
+
+    const expected3 = ['#ff0000', '#0000ff', '#00ff00'].map(hex2hsl).map(c => c.map(errorCorrect));
+    const result3 = complimentHsl(3, c).map(c => c.map(errorCorrect));
+
+    const diffs3 = expected3.map((ex, i) => [
+      Math.max(result3[i][0], ex[0]) - Math.min(result3[i][0], ex[0]),
+      Math.max(result3[i][1], ex[1]) - Math.min(result3[i][1], ex[1]),
+      Math.max(result3[i][2], ex[2]) - Math.min(result3[i][2], ex[2]),
+    ]);
+    diffs3.forEach(diff => diff.forEach(d => expect(d < hslErrorMargin).to.be.true));
+
+    const expected4 = ['#ff0000', '#7f00ff', '#00ffff', '#80ff00'].map(hex2hsl).map(c => c.map(errorCorrect));
+    const result4 = complimentHsl(4, c).map(c => c.map(errorCorrect));
+    const diffs4 = expected4.map((ex, i) => [
+      Math.max(result4[i][0], ex[0]) - Math.min(result4[i][0], ex[0]),
+      Math.max(result4[i][1], ex[1]) - Math.min(result4[i][1], ex[1]),
+      Math.max(result4[i][2], ex[2]) - Math.min(result4[i][2], ex[2]),
+    ]);
+    diffs4.forEach(diff => diff.forEach(d => expect(d < hslErrorMargin).to.be.true));
+  });
+
+  it('create a rgb complimentary colour pallete', () => {
+    const c = hex2rgb('#ff0000');
+    const expected2 = ['#ff0000', '#00ffff'].map(hex2rgb);
+    const result2 = complimentRgb(2, c);
+
+    const diffs2 = expected2.map((ex, i) => [
+      Math.max(result2[i][0], ex[0]) - Math.min(result2[i][0], ex[0]),
+      Math.max(result2[i][1], ex[1]) - Math.min(result2[i][1], ex[1]),
+      Math.max(result2[i][2], ex[2]) - Math.min(result2[i][2], ex[2]),
+    ]);
+    diffs2.forEach(diff => diff.forEach(d => expect(d < errorMargin).to.be.true));
+
+    const expected3 = ['#ff0000', '#0000ff', '#00ff00'].map(hex2rgb);
+    const result3 = complimentRgb(3, c);
+
+    const diffs3 = expected3.map((ex, i) => [
+      Math.max(result3[i][0], ex[0]) - Math.min(result3[i][0], ex[0]),
+      Math.max(result3[i][1], ex[1]) - Math.min(result3[i][1], ex[1]),
+      Math.max(result3[i][2], ex[2]) - Math.min(result3[i][2], ex[2]),
+    ]);
+    diffs3.forEach(diff => diff.forEach(d => expect(d < errorMargin).to.be.true));
+
+    const expected4 = ['#ff0000', '#7f00ff', '#00ffff', '#80ff00'].map(hex2rgb);
+    const result4 = complimentRgb(4, c);
+    const diffs4 = expected4.map((ex, i) => [
+      Math.max(result4[i][0], ex[0]) - Math.min(result4[i][0], ex[0]),
+      Math.max(result4[i][1], ex[1]) - Math.min(result4[i][1], ex[1]),
+      Math.max(result4[i][2], ex[2]) - Math.min(result4[i][2], ex[2]),
+    ]);
+    diffs4.forEach(diff => diff.forEach(d => expect(d < errorMargin).to.be.true));
+  });
+
+  it('create a hex complimentary colour pallete', () => {
+    const c = '#ff0000';
+    const expected2 = ['#ff0000', '#00ffff'];
+    const result2 = complimentHex(2, c);
+    expect(result2).to.deep.equal(expected2);
+
+    const expected3 = ['#ff0000', '#0000ff', '#00ff00'];
+    const result3 = complimentHex(3, c);
+    expect(result3).to.deep.equal(expected3);
+
+    const expected4 = ['#ff0000', '#7f00ff', '#00ffff', '#80ff00'];
+    const result4 = complimentHex(4, c);
+    expect(expected4).to.deep.equal(result4);
   });
 });
 /* eslint-enable func-names */

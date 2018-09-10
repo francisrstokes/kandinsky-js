@@ -5,7 +5,8 @@
   "main": "dist/kandinsky.js",
   "scripts": {
     "test": "mocha tests",
-    "build": "rollup src/kandinsky.main.js --file dist/kandinsky.js --format umd --name \"kandinsky\""
+    "build": "rollup src/kandinsky.main.js --file dist/kandinsky.js --format umd --name \"kandinsky\"",
+    "test:build": "yarn build && yarn test"
   },
   "repository": {
     "type": "git",

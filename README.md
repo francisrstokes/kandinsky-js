@@ -177,7 +177,31 @@ multiGradient :: Int -> [[Number, Number, Number]] -> [[Number, Number, Number]
 
 > returns a rounded, length `n` array of Vector3 colours. colours are the ones formed from the `linearGradient(n/(numColours-1), col1, col2)` for all colours `col1, col2, ..., colN`
 
-## __polute(target)__
+### __complimentHex(n, hexString)__
+
+```javascript
+complimentHex :: Int -> String -> [String]
+```
+
+> returns an length `n` array of hex strings. The 0th color is the same as the input `hexString`, while the others are colours corresponding to an eve turn around the colour wheel. If `n` is 3 for example, the two other colours would represent a 1/3 and 2/3 rotation of the colour wheel.
+
+### __complimentHsl(n, hsl)__
+
+```javascript
+complimentHsl :: Int -> [Number, Number, Number] -> [[Number, Number, Number]]
+```
+
+> returns an length `n` array of hsl Vector3. The 0th color is the same as the input `hsl`, while the others are colours corresponding to an eve turn around the colour wheel. If `n` is 3 for example, the two other colours would represent a 1/3 and 2/3 rotation of the colour wheel.
+
+### __complimentRgb(n, rgb)__
+
+```javascript
+complimentRgb :: Int -> [Number, Number, Number] -> [[Number, Number, Number]]
+```
+
+> returns an length `n` array of rgb Vector3. The 0th color is the same as the input `rgb`, while the others are colours corresponding to an eve turn around the colour wheel. If `n` is 3 for example, the two other colours would represent a 1/3 and 2/3 rotation of the colour wheel.
+
+### polute(target)__
 
 ```javascript
 polute :: Object -> void
