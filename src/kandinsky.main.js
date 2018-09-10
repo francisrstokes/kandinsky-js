@@ -170,7 +170,7 @@ const darkenHex = curry((amount, hex) => pipe(
 const lerp3 = curry((t, [a1, b1, c1], [a2, b2, c2]) => [
   a1 + t * (a2 - a1),
   b1 + t * (b2 - b1),
-  c1 + t * (c2 - c1)
+  c1 + t * (c2 - c1),
 ]);
 
 // linearGradient :: Int -> [Number, Number, Number] -> [Number, Number, Number] -> [[Number, Number, Number]]
@@ -186,7 +186,7 @@ const gradient = curry((ease, n, c1, c2) => {
 });
 
 // multiGradient :: Int -> [[Number, Number, Number]] -> [[Number, Number, Number]]
-const multiGradient = (n, colors) => {
+const multiGradient = curry((n, colors) => {
   return colors.reduce((grad, col, i) => {
     if (i === 0) return grad;
     const roundingFn = (i === colors.length-1 || i === 1)
@@ -201,7 +201,16 @@ const multiGradient = (n, colors) => {
       ...linearGradient(roundingFn(n/(colors.length - 1)), col1, col2)
     ];
   }, []);
-};
+});
+
+// rGradient :: Function -> Int -> [Number, Number, Number] -> [Number, Number, Number] -> [[Int, Int, Int]]
+const rGradient = curry((ease, n, c1, c2) => gradient(ease, n, c1, c2).map(color => color.map(Math.round)));
+
+// rLinearGradient :: Int -> [Number, Number, Number] -> [Number, Number, Number] -> [[Int, Int, Int]]
+const rLinearGradient = curry((n, c1, c2) => linearGradient(n, c1, c2).map(color => color.map(Math.round)));
+
+// multiGradient :: Int -> [[Number, Number, Number]] -> [[Int, Int, Int]]
+const rMultiGradient = curry((n, colors) => multiGradient(n, colors).map(color => color.map(Math.round)));
 
 // complimentHsl :: Int -> [Number, Number, Number] -> [Number, Number, Number]
 const complimentHsl = curry((n, [h, s, l]) => Array.from(Array(n), (_, i) => [
@@ -241,6 +250,9 @@ const polute = (target = window) => {
   target.linearGradient = linearGradient;
   target.gradient = gradient;
   target.multiGradient = multiGradient;
+  target.rGradient = rGradient;
+  target.rLinearGradient = rLinearGradient;
+  target.rMultiGradient = rMultiGradient;
   target.complimentHsl = complimentHsl;
   target.complimentRgb = complimentRgb;
   target.complimentHex = complimentHex;
@@ -263,6 +275,9 @@ export {lerp3};
 export {linearGradient};
 export {gradient};
 export {multiGradient};
+export {rGradient};
+export {rLinearGradient};
+export {rMultiGradient};
 export {complimentHsl};
 export {complimentRgb};
 export {complimentHex};

@@ -21,6 +21,9 @@ const {
   linearGradient,
   gradient,
   multiGradient,
+  rLinearGradient,
+  rGradient,
+  rMultiGradient,
 
   complimentRgb,
   complimentHex,
@@ -180,6 +183,17 @@ describe('Kandisky JS Colour Library', function() {
     expect(out).to.deep.equal(expected)
   });
 
+  it('create a rounded linear gradient between two vector3 colors', () => {
+    const a = [0, 0, 0];
+    const b = [255, 255, 255];
+    const n = 10;
+
+    const out = rLinearGradient(10, a, b);
+
+    const expected = Array.from(Array(n), (_, i) => lerp3(i / (n-1), a, b).map(Math.round));
+    expect(out).to.deep.equal(expected)
+  });
+
   it('create a nonlinear gradient between two vector3 colors', () => {
     const a = [0, 0, 0];
     const b = [255, 255, 255];
@@ -190,6 +204,19 @@ describe('Kandisky JS Colour Library', function() {
     const out = gradient(easeFn, 10, a, b);
 
     const expected = Array.from(Array(n), (_, i) => lerp3(easeFn(i / (n-1)), a, b));
+    expect(out).to.deep.equal(expected)
+  });
+
+  it('create a rounded nonlinear gradient between two vector3 colors', () => {
+    const a = [0, 0, 0];
+    const b = [255, 255, 255];
+    const n = 10;
+
+    const easeFn = t => t ** 2;
+
+    const out = rGradient(easeFn, 10, a, b);
+
+    const expected = Array.from(Array(n), (_, i) =>lerp3(easeFn(i / (n-1)), a, b).map(Math.round));
     expect(out).to.deep.equal(expected)
   });
 
@@ -212,6 +239,29 @@ describe('Kandisky JS Colour Library', function() {
     ];
 
     const g2 = multiGradient(n, [a, b, c, d]);
+
+    expect(g1).to.deep.equal(g2);
+  });
+
+  it('create a rounded linear gradient of multiple vector3 colors', () => {
+    const a = [0, 0, 0];
+    const b = [255, 255, 255];
+    const c = [23, 45, 67];
+    const d = [99, 101, 222];
+    const n = 10;
+
+    for (let i = 1; i < 101; i += 1) {
+      const mg2 = multiGradient(i, [a, b]);
+      expect(mg2.length).to.equal(i);
+    }
+
+    const g1 = [
+      ...linearGradient(Math.ceil(n/3), a, b),  // Start and end gradients get ceil'd
+      ...linearGradient(Math.round(n/3), b, c), // Middle gradients get round'd
+      ...linearGradient(Math.ceil(n/3), c, d),
+    ].map(color => color.map(Math.round));
+
+    const g2 = rMultiGradient(n, [a, b, c, d]);
 
     expect(g1).to.deep.equal(g2);
   });
