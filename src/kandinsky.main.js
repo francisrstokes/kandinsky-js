@@ -14,15 +14,28 @@ const pipe = (fn1, ...functions) =>
   (...args) =>
     functions.reduce((acc, fn) => fn(acc), fn1(...args));
 
+// wrapValue :: Number -> Number -> Number -> Number
+const wrapValue = curry((m, M, v) => {
+  if (v < m) {
+    const diff = M - v - 1;
+    return wrapValue(m, M, M - diff);
+  }
+  if (v > M) {
+    const diff = v - M - 1;
+    return wrapValue(m, M, m + diff);
+  }
+  return v;
+});
+
+// wrapNorm :: Number -> Number
+const wrapNorm = wrapValue(0, 1);
+
 // clamp :: Number -> Number -> Number
 const clamp = curry((min, max, n) => {
   if (n < min) return min;
   if (n > max) return max;
   return n;
 });
-
-// clampRgb :: Int -> Int
-const clampRgb = clamp(0, 255);
 
 // clampNorm :: Int -> Int
 const clampNorm = clamp(0, 1);
@@ -188,7 +201,28 @@ const multiGradient = (n, colors) => {
       ...linearGradient(roundingFn(n/(colors.length - 1)), col1, col2)
     ];
   }, []);
-}
+};
+
+// complimentHsl :: Int -> [Number, Number, Number] -> [Number, Number, Number]
+const complimentHsl = curry((n, [h, s, l]) => Array.from(Array(n), (_, i) => [
+  wrapNorm(h - (i/n)),
+  s,
+  l
+]));
+
+// complimentRgb :: Int -> [Number, Number, Number] -> [Number, Number, Number]
+const complimentRgb = curry((n, rgb) => pipe(
+  rgb2hsl,
+  complimentHsl(n),
+  rgbs => rgbs.map(hsl2rgb),
+)(rgb));
+
+// complimentHex :: Int -> String -> [String]
+const complimentHex = curry((n, hex) => pipe(
+  hex2hsl,
+  complimentHsl(n),
+  hsls => hsls.map(hsl2hex),
+)(hex));
 
 const polute = (target = window) => {
   target.rgb2hsl = rgb2hsl;
@@ -207,6 +241,9 @@ const polute = (target = window) => {
   target.linearGradient = linearGradient;
   target.gradient = gradient;
   target.multiGradient = multiGradient;
+  target.complimentHsl = complimentHsl;
+  target.complimentRgb = complimentRgb;
+  target.complimentHex = complimentHex;
 };
 
 export {polute};
@@ -226,3 +263,6 @@ export {lerp3};
 export {linearGradient};
 export {gradient};
 export {multiGradient};
+export {complimentHsl};
+export {complimentRgb};
+export {complimentHex};
