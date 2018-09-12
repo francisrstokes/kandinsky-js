@@ -233,6 +233,22 @@ const complimentHex = curry((n, hex) => pipe(
   hsls => hsls.map(hsl2hex),
 )(hex));
 
+// rgb2css :: Number -> [Number, Number, Number] -> String
+const rgb2css = curry((alpha, rgb) => {
+  const a = typeof alpha === 'number' ? clampNorm(alpha) : 1;
+  const [r, g, b] = rgb.map(pipe(Math.round, clamp(0, 255)));
+  return `rgba(${r}, ${g}, ${b}, ${a})`;
+});
+
+// hsl2css :: Number -> [Number, Number, Number] -> String
+const hsl2css = curry((alpha, [h, s, l]) => {
+  const a = typeof alpha === 'number' ? clampNorm(alpha) : 1;
+  const H = Math.round(h * 360);
+  const S = Math.round(s * 100);
+  const L = Math.round(l * 100);
+  return `hsl(${H}, ${S}%, ${L}%, ${a})`;
+});
+
 const polute = (target = window) => {
   target.rgb2hsl = rgb2hsl;
   target.hsl2rgb = hsl2rgb;
@@ -256,6 +272,8 @@ const polute = (target = window) => {
   target.complimentHsl = complimentHsl;
   target.complimentRgb = complimentRgb;
   target.complimentHex = complimentHex;
+  target.rgb2css = rgb2css;
+  target.hsl2css = hsl2css;
 };
 
 export {polute};
@@ -281,3 +299,5 @@ export {rMultiGradient};
 export {complimentHsl};
 export {complimentRgb};
 export {complimentHex};
+export {rgb2css};
+export {hsl2css};

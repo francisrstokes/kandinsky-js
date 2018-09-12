@@ -29,6 +29,9 @@ const {
   complimentHex,
   complimentHsl,
 
+  rgb2css,
+  hsl2css,
+
   polute
 } = require('../dist/kandinsky');
 
@@ -343,6 +346,34 @@ describe('Kandisky JS Colour Library', function() {
     const expected4 = ['#ff0000', '#7f00ff', '#00ffff', '#80ff00'];
     const result4 = complimentHex(4, c);
     expect(expected4).to.deep.equal(result4);
+  });
+
+  it('get a css string from an rgb color', () => {
+    const expected1 = 'rgba(255, 128, 64, 1)';
+    expect(rgb2css(1, [255, 128, 64])).to.equal(expected1);
+
+    const expected2 = 'rgba(255, 128, 64, 1)';
+    expect(rgb2css(1.5, [255, 128, 64])).to.equal(expected2);
+
+    const expected3 = 'rgba(255, 128, 64, 1)';
+    expect(rgb2css(null, [255, 128, 64])).to.equal(expected3);
+
+    const expected4 = 'rgba(255, 128, 64, 0.3)';
+    expect(rgb2css(0.3, [255, 128, 64])).to.equal(expected4);
+  });
+
+  it('get a css string from an hsl color', () => {
+    const expected1 = 'hsl(101, 62%, 41%, 1)';
+    expect(hsl2css(1, [0.28, 0.62, 0.414])).to.equal(expected1);
+
+    const expected2 = 'hsl(101, 62%, 41%, 0.12)';
+    expect(hsl2css(0.12, [0.28, 0.62, 0.414])).to.equal(expected2);
+
+    const expected3 = 'hsl(101, 62%, 41%, 1)';
+    expect(hsl2css(null, [0.28, 0.62, 0.414])).to.equal(expected3);
+
+    const expected4 = 'hsl(101, 62%, 41%, 1)';
+    expect(hsl2css(1.5, [0.28, 0.62, 0.414])).to.equal(expected4);
   });
 });
 /* eslint-enable func-names */
