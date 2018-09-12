@@ -1,6 +1,6 @@
 {
   "name": "kandinsky-js",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "A tiny colour library",
   "main": "dist/kandinsky.js",
   "scripts": {
