@@ -7,7 +7,8 @@
   "scripts": {
     "test": "mocha tests",
     "build": "tsc",
-    "test:build": "npm run build && npm run test"
+    "test:build": "npm run build && npm run test",
+    "prepack": "npm run test:build"
   },
   "repository": {
     "type": "git",
