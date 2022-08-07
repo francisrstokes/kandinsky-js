@@ -10,30 +10,40 @@
 
 `npm install --save kandinsky-js`
 
-and import or require as needed. If you need to use a standalone windowed version in a script tag:
-
-`<script src="https://unpkg.com/kandinsky-js@1.3.0/dist/kandinsky.js"></script>`
-
-or
-
-`<script src="node_modules/kandinsky-js/dist/kandinsky.js"></script>`
-
+and import as needed.
 
 ## Features
 
-- Immutable, curried, composable functions
+- Written in TypeScript, usable in JavaScript
+- Immutable, composable functions
 - Deals with hex, rgb and hsl colours
-- Composable and fully curried
+- Programmatic generation for linear and non-linear gradients
 
 ## API
+
+### Types
+
+---
+```typescript
+type RGB = [number, number, number];
+type HSL = [number, number, number];
+
+// When either RGB or HSL colours can be used
+type XYZ = RGB | HSL;
+
+// `t` is expected to be in range [0, 1], and the function should return a value
+// in the range [0, 1]
+type EaseFn = (t: number) => number;
+```
+---
 
 ### __rgb2hsl(rgbArray)__
 
 > returns a hsl array
 
 ---
-```javascript
-rgb2hsl :: [Number, Number, Number] -> [Number, Number, Number]
+```typescript
+rgb2hsl: ([r, g, b]: RGB) => HSL;
 ```
 ---
 
@@ -42,8 +52,8 @@ rgb2hsl :: [Number, Number, Number] -> [Number, Number, Number]
 > returns an rgb array
 
 ---
-```javascript
-hsl2rgb :: [Number, Number, Number] -> [Number, Number, Number]
+```typescript
+hsl2rgb: ([h, s, l]: HSL) => RGB;
 ```
 ---
 
@@ -52,8 +62,8 @@ hsl2rgb :: [Number, Number, Number] -> [Number, Number, Number]
 > returns an rgb array
 
 ---
-```javascript
-hex2rgb :: String -> [Number, Number, Number]
+```typescript
+hex2rgb: (hex: string) => RGB;
 ```
 ---
 
@@ -62,8 +72,8 @@ hex2rgb :: String -> [Number, Number, Number]
 > returns a hex string
 
 ---
-```javascript
-rgb2hex :: [Number, Number, Number] -> String<
+```typescript
+rgb2hex: (rgb: RGB) => string;
 ```
 ---
 
@@ -72,8 +82,8 @@ rgb2hex :: [Number, Number, Number] -> String<
 > returns a hsl array
 
 ---
-```javascript
-hex2hsl :: String -> [Number, Number, Number]
+```typescript
+hex2hsl: (hex: string) => HSL;
 ```
 ---
 
@@ -82,8 +92,8 @@ hex2hsl :: String -> [Number, Number, Number]
 > returns a hex string
 
 ---
-```javascript
-hsl2hex :: [Number, Number, Number] -> String<
+```typescript
+hsl2hex: (hsl: HSL) => string;
 ```
 ---
 
@@ -92,8 +102,8 @@ hsl2hex :: [Number, Number, Number] -> String<
 > returns a darkened rgb array. `amount` is a value in the range `[0, 1]`
 
 ---
-```javascript
-darkenRgb :: Number -> [Number, Number, Number] -> [Number, Number, Number]
+```typescript
+darkenRgb: (amount: number, rgb: RGB) => RGB;
 ```
 ---
 
@@ -102,8 +112,8 @@ darkenRgb :: Number -> [Number, Number, Number] -> [Number, Number, Number]
 > returns a lightened rgb array. `amount` is a value in the range `[0, 1]`
 
 ---
-```javascript
-lightenRgb :: Number -> [Number, Number, Number] -> [Number, Number, Number]
+```typescript
+lightenRgb: (amount: number, rgb: RGB) => RGB;
 ```
 ---
 
@@ -112,8 +122,8 @@ lightenRgb :: Number -> [Number, Number, Number] -> [Number, Number, Number]
 > returns a darkened hsl array. `amount` is a value in the range `[0, 1]`
 
 ---
-```javascript
-darkenHsl :: Number -> [Number, Number, Number] -> [Number, Number, Number]
+```typescript
+darkenHsl: (amount: number, [h, s, l]: HSL) => HSL;
 ```
 ---
 
@@ -122,8 +132,8 @@ darkenHsl :: Number -> [Number, Number, Number] -> [Number, Number, Number]
 > returns a lightened hsl array. `amount` is a value in the range `[0, 1]`
 
 ---
-```javascript
-lightenHsl :: Number -> [Number, Number, Number] -> [Number, Number, Number]
+```typescript
+lightenHsl: (amount: number, [h, s, l]: HSL) => HSL;
 ```
 ---
 
@@ -132,8 +142,8 @@ lightenHsl :: Number -> [Number, Number, Number] -> [Number, Number, Number]
 > returns a lightened hex string. `amount` is a value in the range `[0, 1]`
 
 ---
-```javascript
-lightenHex :: Number -> String -> [Number, Number, Number]
+```typescript
+lightenHex: (amount: number, hex: string) => string;
 ```
 ---
 
@@ -142,8 +152,8 @@ lightenHex :: Number -> String -> [Number, Number, Number]
 > returns a darkened hex string. `amount` is a value in the range `[0, 1]`
 
 ---
-```javascript
-darkenHex :: Number -> String -> [Number, Number, Number]
+```typescript
+darkenHex: (amount: number, hex: string) => string;
 ```
 ---
 
@@ -152,8 +162,8 @@ darkenHex :: Number -> String -> [Number, Number, Number]
 > returns a Vector3 colour somewhere between `c1` and `c2`. `t` is the "time" value in the range `[0, 1]`
 
 ---
-```javascript
-lerp3 :: Int -> [Number, Number, Number] -> [Number, Number, Number] -> [Number, Number, Number]
+```typescript
+lerp3: (t: number, [a1, b1, c1]: XYZ, [a2, b2, c2]: XYZ) => XYZ;
 ```
 ---
 
@@ -162,8 +172,8 @@ lerp3 :: Int -> [Number, Number, Number] -> [Number, Number, Number] -> [Number,
 > returns an length `n` array of Vector3 colours. colours are evenly spaced between `c1` and `c2`.
 
 ---
-```javascript
-linearGradient :: Int -> [Number, Number, Number] -> [Number, Number, Number] -> [[Number, Number, Number]
+```typescript
+linearGradient: (n: number, c1: XYZ, c2: XYZ) => XYZ[];
 ```
 ---
 
@@ -172,8 +182,8 @@ linearGradient :: Int -> [Number, Number, Number] -> [Number, Number, Number] ->
 > returns an length `n` array of Vector3 colours. colours are between `c1` and `c2`, and are spaced according to the easing function `easeFn`.
 
 ---
-```javascript
-gradient :: Function -> Int -> [Number, Number, Number] -> [Number, Number, Number] -> [[Number, Number, Number]
+```typescript
+gradient: (ease: EaseFn, n: number, c1: XYZ, c2: XYZ) => XYZ[];
 ```
 ---
 
@@ -182,8 +192,8 @@ gradient :: Function -> Int -> [Number, Number, Number] -> [Number, Number, Numb
 > returns a length `n` array of Vector3 colours. colours are the ones formed from the `linearGradient(n/(numColours-1), col1, col2)` for all colours `col1, col2, ..., colN`
 
 ---
-```javascript
-multiGradient :: Int -> [[Number, Number, Number]] -> [[Number, Number, Number]
+```typescript
+multiGradient: (n: number, colors: XYZ[]) => XYZ[];
 ```
 ---
 
@@ -193,8 +203,8 @@ multiGradient :: Int -> [[Number, Number, Number]] -> [[Number, Number, Number]
 > returns a rounded, length `n` array of Vector3 colours. colours are evenly spaced between `c1` and `c2`.
 
 ---
-```javascript
-rLinearGradient :: Int -> [Number, Number, Number] -> [Number, Number, Number] -> [[Number, Number, Number]
+```typescript
+rLinearGradient: (n: number, c1: XYZ, c2: XYZ) => XYZ[];
 ```
 ---
 
@@ -203,8 +213,8 @@ rLinearGradient :: Int -> [Number, Number, Number] -> [Number, Number, Number] -
 > returns a rounded, length `n` array of Vector3 colours. colours are between `c1` and `c2`, and are spaced according to the easing function `easeFn`.
 
 ---
-```javascript
-rGradient :: Function -> Int -> [Number, Number, Number] -> [Number, Number, Number] -> [[Number, Number, Number]
+```typescript
+rGradient: (ease: EaseFn, n: number, c1: XYZ, c2: XYZ) => XYZ[];
 ```
 ---
 
@@ -213,8 +223,8 @@ rGradient :: Function -> Int -> [Number, Number, Number] -> [Number, Number, Num
 > returns a rounded, length `n` array of Vector3 colours. colours are the ones formed from the `linearGradient(n/(numColours-1), col1, col2)` for all colours `col1, col2, ..., colN`
 
 ---
-```javascript
-rMultiGradient :: Int -> [[Number, Number, Number]] -> [[Number, Number, Number]
+```typescript
+rMultiGradient: (n: number, colors: XYZ[]) => XYZ[];
 ```
 ---
 
@@ -223,8 +233,8 @@ rMultiGradient :: Int -> [[Number, Number, Number]] -> [[Number, Number, Number]
 > returns an length `n` array of hex strings. The 0th color is the same as the input `hexString`, while the others are colours corresponding to an eve turn around the colour wheel. If `n` is 3 for example, the two other colours would represent a 1/3 and 2/3 rotation of the colour wheel.
 
 ---
-```javascript
-complimentHex :: Int -> String -> [String]
+```typescript
+complimentHex: (n: number, hex: string) => string[];
 ```
 ---
 
@@ -233,8 +243,8 @@ complimentHex :: Int -> String -> [String]
 > returns an length `n` array of hsl Vector3. The 0th color is the same as the input `hsl`, while the others are colours corresponding to an eve turn around the colour wheel. If `n` is 3 for example, the two other colours would represent a 1/3 and 2/3 rotation of the colour wheel.
 
 ---
-```javascript
-complimentHsl :: Int -> [Number, Number, Number] -> [[Number, Number, Number]]
+```typescript
+complimentHsl: (n: number, [h, s, l]: HSL) => HSL[];
 ```
 ---
 
@@ -243,8 +253,8 @@ complimentHsl :: Int -> [Number, Number, Number] -> [[Number, Number, Number]]
 > returns an length `n` array of rgb Vector3. The 0th color is the same as the input `rgb`, while the others are colours corresponding to an eve turn around the colour wheel. If `n` is 3 for example, the two other colours would represent a 1/3 and 2/3 rotation of the colour wheel.
 
 ---
-```javascript
-complimentRgb :: Int -> [Number, Number, Number] -> [[Number, Number, Number]]
+```typescript
+complimentRgb: (n: number, rgb: RGB) => RGB[];
 ```
 ---
 
@@ -253,8 +263,8 @@ complimentRgb :: Int -> [Number, Number, Number] -> [[Number, Number, Number]]
 > returns an rgba css string like `rgba(255, 255, 255, 1)` from the rgb color and alpha value
 
 ---
-```javascript
-rgb2css :: Number -> [Number, Number, Number] -> String
+```typescript
+rgb2css: (alpha: number, rgb: RGB) => string;
 ```
 ---
 
@@ -263,22 +273,7 @@ rgb2css :: Number -> [Number, Number, Number] -> String
 > returns an hsl css string like `hsl(222, 50%, 75%, 0.6)` from the hsl color and alpha value
 
 ---
-```javascript
-hsl2css :: Number -> [Number, Number, Number] -> String
+```typescript
+hsl2css: (alpha: number, [h, s, l]: HSL) => string;
 ```
 ---
-
-### __polute(target)__
-
-> Polute the `target` object by injecting all of the above functions. By default `target` refers to `window`.
-
----
-```javascript
-polute :: Object -> void
-```
----
-
-
-### Window API
-
-When using with a script tag in the window, functions are exported on the `window.kandinsky` namespace.
