@@ -1,6 +1,6 @@
-const chai = require('chai');
-const expect = chai.expect;
-const {
+import {expect} from 'chai';
+
+import {
   hex2rgb,
   rgb2hex,
 
@@ -32,8 +32,7 @@ const {
   rgb2css,
   hsl2css,
 
-  polute
-} = require('../dist/kandinsky');
+} from '../dist/kandinsky.js';
 
 // This function corrects rounding errors like 0.69999999999 to 0.70
 const errorCorrect = n => parseFloat(parseFloat(n).toPrecision(2));
@@ -45,12 +44,6 @@ const hslErrorMargin = 360/100;
 
 /* eslint-disable func-names */
 describe('Kandisky JS Colour Library', function() {
-  it('should polute a target object', () => {
-    const obj = {};
-    polute(obj);
-    expect(Object.keys(obj)).to.contain('hex2rgb');
-  });
-
   it('convert a hex code to a rgb array', () => {
     const hex = '#FF0000';
     const hexNoHash = 'FF0000';
